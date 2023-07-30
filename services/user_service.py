@@ -16,13 +16,13 @@ db = client[database_name]
 collection = db.users
 
 def get_all_users():
-    users = list(collection.find({}, {"_id": 1, "name": 1, "email": 1, "password": 1}))
+    users = list(collection.find({}))
     for user in users:
         user["_id"] = str(user["_id"])  # Convert ObjectId to string
     return users
 
 def get_user(id):
-    user = collection.find_one({"_id": ObjectId(id)}, {"_id": 1, "name": 1, "email": 1, "password": 1})
+    user = collection.find_one({"_id": ObjectId(id)})
     if user:
         user["_id"] = str(user["_id"])  # Convert ObjectId to string
         return user
