@@ -6,11 +6,10 @@ import os
 
 load_dotenv()
 
-# MongoDB configuration
 mongo_uri = os.getenv("MONGODB_URI")
 database_name = os.getenv("DATABASE_NAME")
 
-# Connect to MongoDB
+
 client = MongoClient(mongo_uri)
 db = client[database_name]
 collection = db.users
@@ -18,13 +17,13 @@ collection = db.users
 def get_all_users():
     users = list(collection.find({}))
     for user in users:
-        user["_id"] = str(user["_id"])  # Convert ObjectId to string
+        user["_id"] = str(user["_id"])
     return users
 
 def get_user(id):
     user = collection.find_one({"_id": ObjectId(id)})
     if user:
-        user["_id"] = str(user["_id"])  # Convert ObjectId to string
+        user["_id"] = str(user["_id"])
         return user
     return None
 

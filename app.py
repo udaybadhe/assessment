@@ -2,10 +2,8 @@
 from flask import Flask, jsonify, request
 from services.user_service import get_all_users, get_user, create_user, update_user, delete_user
 
-# Create Flask application instance
 app = Flask(__name__)
 
-# Routes for CRUD operations
 @app.route("/users", methods=["GET"])
 def get_all_users_route():
     users = get_all_users()
@@ -41,6 +39,5 @@ def delete_user_route(id):
         return jsonify({"message": "User deleted successfully"}), 200
     return jsonify({"message": "User not found"}), 404
 
-# Run the Flask application
 if __name__ == "__main__":
     app.run(debug=True)
