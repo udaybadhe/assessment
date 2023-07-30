@@ -1,4 +1,3 @@
-```markdown
 # Flask CRUD API with MongoDB
 
 A Flask application that provides a RESTful API for performing CRUD operations on a User resource using a MongoDB database.
@@ -28,14 +27,14 @@ This Flask application provides REST API endpoints to perform CRUD operations (C
 
 1. Clone the repository:
 
-```bash
+```
 git clone https://github.com/your-username/flask-mongodb-crud.git
 cd flask-mongodb-crud
 ```
 
 2. Create a virtual environment and activate it:
 
-```bash
+```
 python -m venv venv
 source venv/bin/activate    # For Windows: venv\Scripts\activate
 ```
@@ -55,7 +54,7 @@ DATABASE_NAME=your-database-name
 
 5. Run the Flask application:
 
-```bash
+```
 python app.py
 ```
 
