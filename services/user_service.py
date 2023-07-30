@@ -1,14 +1,14 @@
+# services/user_service.py
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env file
 load_dotenv()
 
 # MongoDB configuration
-mongo_uri = os.getenv("MONGODB_URI", "mongodb://localhost:27017")  # Use default URI if not provided
-database_name = "assessment_db"  # Corrected database name
+mongo_uri = os.getenv("MONGODB_URI")
+database_name = os.getenv("DATABASE_NAME")
 
 # Connect to MongoDB
 client = MongoClient(mongo_uri)
@@ -16,12 +16,17 @@ db = client[database_name]
 collection = db.users
 
 def get_all_users():
-    users = list(collection.find({}, {"_id": 0}))
+    users = list(collection.find({}, {"_id": 1, "name": 1, "email": 1, "password": 1}))
+    for user in users:
+        user["_id"] = str(user["_id"])  # Convert ObjectId to string
     return users
 
 def get_user(id):
-    user = collection.find_one({"_id": ObjectId(id)}, {"_id": 0})
-    return user
+    user = collection.find_one({"_id": ObjectId(id)}, {"_id": 1, "name": 1, "email": 1, "password": 1})
+    if user:
+        user["_id"] = str(user["_id"])  # Convert ObjectId to string
+        return user
+    return None
 
 def create_user(data):
     user = {
