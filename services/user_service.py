@@ -1,14 +1,13 @@
-# services/user_service.py
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 import os
+from models.user import User
 
 load_dotenv()
 
 mongo_uri = os.getenv("MONGODB_URI")
 database_name = os.getenv("DATABASE_NAME")
-
 
 client = MongoClient(mongo_uri)
 db = client[database_name]
@@ -21,35 +20,30 @@ def get_all_users():
     return users
 
 def get_user(id):
-    user = collection.find_one({"_id": ObjectId(id)})
-    if user:
-        user["_id"] = str(user["_id"])
+    user_data = collection.find_one({"_id": ObjectId(id)})
+    if user_data:
+        user = User.from_dict(user_data)
         return user
     return None
 
 def create_user(data):
-    user = {
-        "name": data["name"],
-        "email": data["email"],
-        "password": data["password"]
-    }
-    result = collection.insert_one(user)
+    user = User(data["name"], data["email"], data["password"])
+    result = collection.insert_one(user.to_dict())
     return str(result.inserted_id)
 
 def update_user(id, data):
-    updated_user = {}
-
-    if "name" in data:
-        updated_user["name"] = data["name"]
-    if "email" in data:
-        updated_user["email"] = data["email"]
-    if "password" in data:
-        updated_user["password"] = data["password"]
-
-    if not updated_user:
+    user = get_user(id)
+    if not user:
         return False
 
-    result = collection.update_one({"_id": ObjectId(id)}, {"$set": updated_user})
+    if "name" in data:
+        user.name = data["name"]
+    if "email" in data:
+        user.email = data["email"]
+    if "password" in data:
+        user.password = data["password"]
+
+    result = collection.update_one({"_id": ObjectId(id)}, {"$set": user.to_dict()})
     return result.modified_count > 0
 
 def delete_user(id):
