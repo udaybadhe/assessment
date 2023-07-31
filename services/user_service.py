@@ -27,7 +27,8 @@ def get_user(id):
     return None
 
 def create_user(data):
-    user = User(data["name"], data["email"], data["password"])
+    encrypted_password = User._hash_password(data["password"])
+    user = User(data["name"], data["email"], encrypted_password)
     result = collection.insert_one(user.to_dict())
     return str(result.inserted_id)
 
@@ -41,7 +42,7 @@ def update_user(id, data):
     if "email" in data:
         user.email = data["email"]
     if "password" in data:
-        user.password = data["password"]
+        user.password = User._hash_password(data["password"])
 
     result = collection.update_one({"_id": ObjectId(id)}, {"$set": user.to_dict()})
     return result.modified_count > 0
