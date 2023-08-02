@@ -10,7 +10,6 @@ A Flask application that provides a RESTful API for performing CRUD operations o
 - [Usage](#usage)
 - [Endpoints](#endpoints)
 - [Technologies Used](#technologies-used)
-- [License](#license)
 
 ## Description
 
